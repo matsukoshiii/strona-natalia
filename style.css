@@ -21,6 +21,23 @@
 html { scroll-behavior: smooth; scroll-padding-top: 104px; }
 body { margin: 0; overflow-x: clip; background: var(--paper); color: var(--ink); font: 16px/1.74 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; -webkit-font-smoothing: antialiased; }
 body, button, textarea, input, select { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; }
+
+/* iOS / Safari: wymuś tekstowe renderowanie ozdobników zamiast emoji */
+.top-strip-symbol,
+.flower-mark,
+.hero-sparkle,
+.map-heart-icon,
+.map-detail-flower,
+.situations-photo figcaption span,
+.value-ornament,
+.journey-number span,
+.offer-icon,
+.faq-decoration,
+.closing-flower {
+  font-family: Georgia, "Times New Roman", serif;
+  font-variant-emoji: text;
+}
+
 button, input, select, textarea { font-size: inherit; }
 button { cursor: pointer; }
 a { color: inherit; text-decoration: none; }
@@ -90,7 +107,7 @@ p { color: var(--muted); }
 .hero-visual { position: relative; min-height: 566px; display: grid; place-items: center; isolation: isolate; }
 .hero-ring { position: absolute; border-radius: 50%; pointer-events: none; }
 .hero-ring-outer { width: 94%; aspect-ratio: 1; border: 1px dashed #a1b9a7; opacity: .62; animation: gentle-turn 85s linear infinite; }
-.hero-ring-outer::before { content: "✳"; position: absolute; top: 4%; left: 19%; color: #8daa94; font-size: 18px; }
+.hero-ring-outer::before { content: "✳︎"; position: absolute; top: 4%; left: 19%; color: #8daa94; font-size: 18px; }
 .hero-ring-middle { width: 77%; aspect-ratio: 1; background: #e3eadf; box-shadow: 0 0 0 32px rgba(230,234,221,.55); animation: breathe 8s ease-in-out infinite; }
 .hero-disc { width: 73%; aspect-ratio: 1; z-index: 1; border-radius: 50%; padding: 8px; background: #fffefa; box-shadow: 0 24px 70px rgba(43,67,48,.15); }
 .hero-disc img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
