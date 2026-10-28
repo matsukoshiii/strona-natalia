@@ -32,8 +32,8 @@ const sections = [
 
 const areaContent = [
   {id:'cialo',name:'Ciało i ruch',description:'Jak dziecko doświadcza swojego ciała? Czy potrzebuje dużo ruchu, czy może trudno mu znaleźć moment na odpoczynek? Poszukamy sposobów na wspieranie go w codziennych aktywnościach.', tags:['Potrzeba ruchu','Codzienne aktywności','Odpoczynek']},
-  {id:'emocje',name:'Emocje',description:'Co dziecko komunikuje swoimi reakcjami? Porozmawiamy o emocjach, trudnych chwilach i o tym, jak odpowiadać na potrzeby dziecka bez oceniania.',tags:['Silne reakcje','Wyrażanie emocji','Wyciszenie']},
-  {id:'zmysly',name:'Zmysły',description:'Niektóre bodźce mogą przyciągać, a inne przytłaczać. Przyjrzymy się reakcjom na dotyk, dźwięki, ruch i otoczenie — w kontekście codziennego funkcjonowania.',tags:['Dotyk i faktury','Dźwięki','Wrażliwość sensoryczna']},
+  {id:'emocje',name:'Emocje',description:'Co dziecko komunikuje poprzez swoje reakcje? Porozmawiamy o emocjach i o tym, jak możemy odpowiadać na potrzeby dziecka bez oceniania go.',tags:['Silne reakcje','Wyrażanie emocji','Wyciszenie']},
+  {id:'zmysly',name:'Zmysły',description:'Niektóre bodźce mogą przytłaczać. Przyjrzymy się reakcjom na dotyk, dźwięki, ruch i otoczenie — w kontekście codziennego funkcjonowania.',tags:['Dotyk i faktury','Dźwięki','Wrażliwość sensoryczna']},
   {id:'relacje',name:'Relacja',description:'Jak dziecko nawiązuje kontakt, jak okazuje potrzebę bliskości i co dzieje się w trudnych momentach? Ważna jest zarówno perspektywa dziecka, jak i rodzica.',tags:['Bliskość','Kontakt z otoczeniem','Rodzinna codzienność']},
   {id:'rozwoj',name:'Rozwój',description:'Każde dziecko rozwija się we własnym tempie. Możemy porozmawiać o zabawie, samodzielności, mocnych stronach i obszarach, które budzą Twoje pytania.',tags:['Zabawa','Samodzielność','Mocne strony']}
 ];
@@ -156,6 +156,11 @@ function initForm() {
   const blocks=[...document.querySelectorAll('.form-block')];
   let stateBeforePrint=null;
   window.addEventListener('beforeprint',()=>{
+    document.querySelectorAll('.print-answer').forEach(el=>el.remove());
+    document.querySelectorAll('#generated-form input,#generated-form textarea,#generated-form select').forEach(field=>{
+      const answer=document.createElement('div');answer.className='print-answer';
+      answer.textContent=field.value.trim() || '(pominięto)';field.after(answer);
+    });
     stateBeforePrint=blocks.map(block=>block.open);
     blocks.forEach(block=>block.open=true);
   });
@@ -164,6 +169,41 @@ function initForm() {
     stateBeforePrint=null;
   });
   document.getElementById('print-form').addEventListener('click',()=>window.print());
+}
+
+function downloadAnswers() {
+  const lines=['ANKIETA PRZED KONSULTACJĄ', 'Natalia Szymala', ''];
+  for(const block of document.querySelectorAll('.form-block')) {
+    lines.push(block.querySelector('summary').textContent, '');
+    for(const field of block.querySelectorAll('input,textarea,select')) {
+      lines.push(block.querySelector('label[for="'+field.id+'"]').textContent, field.value.trim() || '(pominięto)', '');
+    }
+  }
+  const url=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\n')],{type:'text/plain;charset=utf-8'}));
+  const link=document.createElement('a');
+  link.href=url;link.download='ankieta-przed-konsultacja-odpowiedzi.txt';
+  document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  document.getElementById('export-status').textContent='Pobrano odpowiedzi. Plik nie został wysłany do Natalii.';
+}
+
+function initDialogs() {
+  let opener=null;
+  const open=(dialog,trigger)=>{
+    if(!dialog || typeof dialog.showModal!=='function')return false;
+    opener=trigger;dialog.showModal();return true;
+  };
+  document.querySelectorAll('[data-dialog]').forEach(button=>button.addEventListener('click',()=>open(document.getElementById(button.dataset.dialog),button)));
+  document.querySelectorAll('[data-booking]').forEach(link=>link.addEventListener('click',event=>{
+    if(open(document.getElementById('booking-dialog'),link))event.preventDefault();
+  }));
+  document.querySelectorAll('dialog').forEach(dialog=>{
+    dialog.querySelector('[data-close-dialog]').addEventListener('click',()=>dialog.close());
+    dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+    dialog.addEventListener('close',()=>{if(opener)opener.focus();});
+  });
+  document.getElementById('download-answers').addEventListener('click',downloadAnswers);
+  document.getElementById('download-answers-dialog').addEventListener('click',downloadAnswers);
 }
 
 function initNavigation() {
@@ -250,6 +290,7 @@ function initReveal() {
 
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('year').textContent=String(new Date().getFullYear());
+  initDialogs();
   initAreaMap();
   initForm();
   initNavigation();

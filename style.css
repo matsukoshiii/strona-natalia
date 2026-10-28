@@ -528,3 +528,51 @@ p { color: var(--muted); }
 .about-art { display: block; min-height: 0; }
 .about-art img { position: absolute; top: 50%; left: 50%; height: auto; max-height: 82%; transform: translate(-50%,-50%); }
 .about-art { overflow: clip; }
+
+/* Uzupełnienia po uwagach Natalii i Grzegorza. */
+.brand-mark { flex: 0 0 48px; width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid #a8baaa; border-radius: 50% 50% 42% 50%; color: var(--pine); background: var(--sage-light); font: 22px/1 Georgia,serif; letter-spacing: -.08em; }
+.brand strong,.footer-brand strong { font-size: 22px; letter-spacing: -.035em; }
+.brand-degree { font-size: .65em; letter-spacing: 0; }
+.nav-inner { gap: 20px; }
+.main-nav { gap: 18px; }
+.hero-disc { width: 87%; }
+.graphic-zoom { position: absolute; bottom: 0; z-index: 4; border: 0; border-bottom: 1px solid #b7c9b7; background: var(--paper); padding: 8px 14px; border-radius: 16px; }
+.offer-card ul li::before,.offer-card ol li::before { content: "✓"; font-size: 13px; color: #819984; }
+.offer-card ol li { padding-left: 22px; }
+.offer-card-featured ol li::before { color: #c4d7c5; }
+.offer-secondary { text-align: center; font-size: 12px; margin-top: 14px; text-decoration: underline; text-underline-offset: 4px; }
+.blog-section { background: var(--cream); }
+.blog-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; align-items: start; }
+.blog-card { padding: 30px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--white); }
+.blog-card h3 { font-size: 29px; line-height: 1.24; margin: 20px 0 16px; }
+.blog-card p { font-size: 14px; }
+.blog-card details { margin-top: 22px; }
+.blog-card summary { cursor: pointer; font-weight: 700; font-size: 13px; color: var(--pine); }
+.blog-body p { margin-top: 16px; }
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.contact-layout h2 { margin: 20px 0; }
+.contact-card { border: 1px solid var(--border); padding: 38px; border-radius: var(--radius); background: var(--cream); }
+.contact-card h3 { font-size: 32px; }
+.contact-email { display: block; overflow-wrap: anywhere; font-size: 18px; color: var(--pine); text-decoration: underline; text-underline-offset: 5px; margin: 24px 0; }
+.contact-note { font-size: 12px; line-height: 1.8; margin-top: 20px; }
+.site-dialog { width: min(620px,calc(100% - 32px)); max-height: 88dvh; padding: 0; border: 1px solid var(--border); border-radius: var(--radius); color: var(--ink); background: var(--paper); box-shadow: var(--shadow); }
+.site-dialog::backdrop { background: #162b22ba; backdrop-filter: blur(5px); }
+.dialog-content { padding: 48px 36px 36px; }
+.site-dialog h2 { font-size: clamp(32px,6vw,48px); margin: 12px 0 22px; }
+.site-dialog p + p { margin-top: 14px; }
+.dialog-close { position: absolute; right: 12px; top: 12px; width: 36px; height: 36px; border: 1px solid var(--border); background: var(--white); color: var(--pine); border-radius: 50%; font-size: 26px; line-height: 1; }
+body:has(dialog[open]) { overflow: hidden; }
+.graphic-dialog { width: min(1250px,calc(100% - 24px)); }
+.graphic-scroll { overflow: auto; margin-top: 20px; }
+.graphic-scroll img { width: 100%; min-width: 1000px; max-width: none; height: auto; }
+.handoff-steps { padding-left: 24px; margin-block: 20px; }
+.handoff-steps li { margin-block: 12px; }
+.handoff-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.form-buttons { flex-wrap: wrap; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.print-answer { display: none; }
+@media(min-width:901px) and (max-width:1150px) { .main-nav { gap: 12px; } .main-nav a { font-size: 11px; } .brand strong { font-size: 20px; } .brand-mark { flex-basis: 42px; width: 42px; height: 42px; } }
+@media(max-width:900px) { .blog-grid { grid-template-columns: 1fr; } .contact-layout { grid-template-columns: 1fr; gap: 32px; } }
+@media(max-width:680px) { .brand { gap: 8px; } .brand strong { font-size: 19px; } .brand-mark { flex-basis: 38px; width: 38px; height: 38px; font-size: 18px; } .hero-disc { width: min(88%,380px); } .hero-visual { margin-bottom: 25px; } .contact-card,.blog-card { padding: 24px; } .dialog-content { padding: 48px 22px 26px; } .footer-brand strong { font-size: 20px; } }
+@media(max-width:360px) { .brand strong { font-size: 17px; } .brand small { font-size: 8px; } .brand-mark { flex-basis: 32px; width: 32px; height: 32px; } .nav-inner { gap: 8px; } }
+@media print { dialog,.sr-only { display: none!important; } .form-field input,.form-field textarea,.form-field select { display: none!important; } .print-answer { display: block; white-space: pre-wrap; overflow-wrap: anywhere; color: black; padding: 6px; border-bottom: 1px solid #bbb; } .form-field { break-inside: auto; } }

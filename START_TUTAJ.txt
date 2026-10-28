@@ -1,47 +1,14 @@
-STRONA NATALII — WERSJA DO OCENY KLIENTA
-======================================
+STRONA NATALII — AKTUALIZACJA 28.10.2026
 
-JAK OBEJRZEĆ
-1. Rozpakuj całe archiwum ZIP.
-2. Kliknij dwukrotnie plik index.html (otworzy się w przeglądarce).
-3. Możesz przejść przez wszystkie sekcje i sprawdzić wersję mobilną.
+1. Otwórz index.html, zachowując pozostałe pliki i foldery obok.
+2. Zmiany po feedbacku opisano w README.md.
+3. Przyciski „Umów spotkanie” otwierają kontakt z Natalią.
+4. Ankietę można pobrać jako TXT lub wydrukować / zapisać jako PDF.
+   Nie jest wysyłana automatycznie. Plik dołącza się do wiadomości ręcznie,
+   po uzgodnieniu z Natalią sposobu przekazania odpowiedzi.
+5. Do uzupełnienia: numer telefonu, portret, usługa automatycznej wysyłki.
+6. Trzy nowe teksty bloga są do oceny redakcyjnej Natalii.
 
-Ważne: zachowaj strukturę folderów. Nie przenoś samego pliku index.html poza folder projektu.
-Nie potrzebujesz serwera ani internetu.
-
-CO JEST GOTOWE
-- Responsywna strona główna ze wszystkimi dostarczonymi grafikami i logo.
-- Interaktywna mapa pięciu obszarów wsparcia (kliknięcia i strzałki na klawiaturze).
-- Sekcja „Brzmi znajomo?” z rozwijanymi przykładami.
-- „O mnie”, wartości współpracy, ścieżka trzech kroków, oferty i ceny.
-- Przygotowanie do konsultacji, FAQ i dokumenty PDF do pobrania.
-- Skrócona ankieta online z postępem i opcją drukowania / zapisu odpowiedzi do PDF.
-- Delikatne animacje, rozwijane menu mobilne i udogodnienia dostępności.
-- Zdjęcia zostały zoptymalizowane; strona nie używa zewnętrznych bibliotek, fontów ani trackerów.
-
-CO WARTO OCENIĆ
-- Czy ton tekstów odpowiada marce Natalii?
-- Czy podane kwalifikacje, nazwy usług, zakres oraz ceny są aktualne?
-- Czy wyróżniona mapa pięciu obszarów pasuje do sposobu pracy?
-- Czy odpowiada Ci paleta zieleni, kolorystyka ilustracji i ogólne wrażenie?
-- Czy sekcje są we właściwej kolejności i niczego nie brakuje?
-
-PRZED PUBLIKACJĄ
-- Ustalić adres e-mail / sposób umawiania wizyt / kalendarz rezerwacji. W tej wersji nie ma fikcyjnych danych kontaktowych ani pozornego modułu rezerwacji.
-- Zweryfikować dane formalne i treść polityki prywatności; szczególnie jeśli przyszła wersja będzie przyjmować dane dzieci.
-- Jeśli właścicielka chce, dostarczyć portret do sekcji „O mnie” (obecnie wykorzystano dostarczoną grafikę oka).
-- Zatwierdzić ostateczne teksty, nazewnictwo i ceny.
-- Opcjonalnie podłączyć domenę i hosting.
-
-PRYWATNOŚĆ ANKIETY
-Formularz online NIE wysyła odpowiedzi, NIE zapisuje ich w localStorage ani na serwerze.
-Wszystkie dane pozostają w bieżącej karcie przeglądarki i znikają po odświeżeniu lub zamknięciu.
-Aby je zachować, użyj przycisku „Drukuj / zapisz odpowiedzi do PDF” i w oknie drukowania wybierz „Zapisz jako PDF”.
-Skrócona ankieta na stronie nie zastępuje pełnego dokumentu PDF udostępnionego w materiałach.
-
-PLIKI
-index.html — strona
-style.css — style, układ, animacje
-script.js — interakcje i formularz
-assets/ — zoptymalizowane grafiki, favicon
-dokumenty/ — ankieta i kwestionariusz do pobrania
+Aktualizacja istniejącej strony GitHub Pages:
+Zastąp pliki w repozytorium strona-natalia zawartością tej paczki,
+zachowując foldery assets i dokumenty. Zatwierdź i wypchnij zmiany.
