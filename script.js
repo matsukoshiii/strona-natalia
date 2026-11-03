@@ -41,36 +41,46 @@ const areaContent = [
 function initAreaMap() {
   const points=[...document.querySelectorAll('.map-point')];
   const lines=[...document.querySelectorAll('.map-line')];
-  const number=document.getElementById('area-number');
-  const heading=document.getElementById('area-heading');
-  const description=document.getElementById('area-description');
-  const tags=document.getElementById('area-tags');
-  const pager=document.getElementById('area-pager-count');
+  const root=document.getElementById('area-panels');
+  if(!points.length || !root)return;
+  // Stacked panels reserve the tallest description at every viewport width.
+  // Switching areas never moves the illustration, pager or following section.
+  const panels=areaContent.map(area=>{
+    const panel=document.createElement('div');
+    panel.className='area-panel';panel.id='area-panel-'+area.id;
+    const heading=document.createElement('h3');
+    heading.id='area-heading-'+area.id;heading.textContent=area.name;
+    const description=document.createElement('p');description.textContent=area.description;
+    const tags=document.createElement('div');tags.className='map-tags';
+    tags.append(...area.tags.map(text=>{const tag=document.createElement('span');tag.textContent=text;return tag;}));
+    panel.setAttribute('aria-labelledby',heading.id);panel.append(heading,description,tags);
+    return panel;
+  });
+  root.replaceChildren(...panels);
   let current=0;
-  if(!points.length) return;
   function setArea(index,focus=false) {
     current=(index+areaContent.length)%areaContent.length;
-    const area=areaContent[current];
-    points.forEach(button=>{
-      const active=button.dataset.area===area.id;
+    points.forEach((button,i)=>{
+      const active=i===current;
       button.classList.toggle('is-active',active);
       button.setAttribute('aria-pressed',String(active));
+      button.setAttribute('aria-controls',panels[i].id);
+      panels[i].classList.toggle('is-active',active);
+      panels[i].setAttribute('aria-hidden',String(!active));
+      panels[i].inert=!active;
     });
-    lines.forEach(line=>line.classList.toggle('is-active',line.dataset.line===area.id));
-    number.textContent=String(current+1).padStart(2,'0')+' / 05';
-    heading.textContent=area.name;
-    description.textContent=area.description;
-    pager.textContent=String(current+1).padStart(2,'0')+' — 05';
-    tags.replaceChildren(...area.tags.map(t=>{const chip=document.createElement('span');chip.textContent=t;return chip;}));
-    if(focus) points[current].focus();
+    lines.forEach(line=>line.classList.toggle('is-active',line.dataset.line===areaContent[current].id));
+    document.getElementById('area-number').textContent=String(current+1).padStart(2,'0')+' / 05';
+    document.getElementById('area-pager-count').textContent=String(current+1).padStart(2,'0')+' — 05';
+    if(focus)points[current].focus({preventScroll:true});
   }
   points.forEach((button,index)=>{
     button.addEventListener('click',()=>setArea(index));
     button.addEventListener('keydown',event=>{
-      if(event.key==='ArrowRight'||event.key==='ArrowDown') {event.preventDefault();setArea(index+1,true)}
-      if(event.key==='ArrowLeft'||event.key==='ArrowUp') {event.preventDefault();setArea(index-1,true)}
-      if(event.key==='Home') {event.preventDefault();setArea(0,true)}
-      if(event.key==='End') {event.preventDefault();setArea(points.length-1,true)}
+      const offset={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[event.key];
+      if(offset){event.preventDefault();setArea(index+offset,true);}
+      if(event.key==='Home'){event.preventDefault();setArea(0,true);}
+      if(event.key==='End'){event.preventDefault();setArea(points.length-1,true);}
     });
   });
   document.getElementById('area-prev').addEventListener('click',()=>setArea(current-1));
@@ -174,7 +184,7 @@ function initForm() {
 function downloadAnswers() {
   const lines=['ANKIETA PRZED KONSULTACJĄ', 'Natalia Szymala', ''];
   for(const block of document.querySelectorAll('.form-block')) {
-    lines.push(block.querySelector('summary').textContent, '');
+    lines.push(block.querySelector('summary').textContent.trim().replace(/^(\d{2})/, '$1. '), '');
     for(const field of block.querySelectorAll('input,textarea,select')) {
       lines.push(block.querySelector('label[for="'+field.id+'"]').textContent, field.value.trim() || '(pominięto)', '');
     }
@@ -188,10 +198,18 @@ function downloadAnswers() {
 }
 
 function initDialogs() {
-  let opener=null;
+  const states=new WeakMap();
+  let lockedScrollY=0;
   const open=(dialog,trigger)=>{
-    if(!dialog || typeof dialog.showModal!=='function')return false;
-    opener=trigger;dialog.showModal();return true;
+    if(!dialog || typeof dialog.showModal!=='function' || dialog.open)return false;
+    lockedScrollY=window.scrollY;
+    states.set(dialog,{trigger,scrollY:lockedScrollY});
+    // Fixed-position lock also prevents the background moving in iOS Safari.
+    document.body.style.top='-'+lockedScrollY+'px';
+    document.body.classList.add('dialog-open');
+    dialog.showModal();
+    dialog.querySelector('[data-close-dialog]').focus({preventScroll:true});
+    return true;
   };
   document.querySelectorAll('[data-dialog]').forEach(button=>button.addEventListener('click',()=>open(document.getElementById(button.dataset.dialog),button)));
   document.querySelectorAll('[data-booking]').forEach(link=>link.addEventListener('click',event=>{
@@ -199,8 +217,24 @@ function initDialogs() {
   }));
   document.querySelectorAll('dialog').forEach(dialog=>{
     dialog.querySelector('[data-close-dialog]').addEventListener('click',()=>dialog.close());
-    dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
-    dialog.addEventListener('close',()=>{if(opener)opener.focus();});
+    let startedOnBackdrop=false;
+    const outside=event=>{
+      const r=dialog.getBoundingClientRect();
+      return event.clientX<r.left || event.clientX>r.right || event.clientY<r.top || event.clientY>r.bottom;
+    };
+    dialog.addEventListener('pointerdown',event=>{startedOnBackdrop=event.target===dialog && outside(event);});
+    dialog.addEventListener('click',event=>{if(startedOnBackdrop && event.target===dialog && outside(event))dialog.close();startedOnBackdrop=false;});
+    dialog.addEventListener('close',()=>{
+      const state=states.get(dialog);
+      document.body.classList.remove('dialog-open');
+      document.body.style.top='';
+      const html=document.documentElement;
+      const previousBehavior=html.style.scrollBehavior;
+      html.style.scrollBehavior='auto';
+      window.scrollTo(0,state?.scrollY ?? lockedScrollY);
+      state?.trigger.focus({preventScroll:true});
+      requestAnimationFrame(()=>{html.style.scrollBehavior=previousBehavior;});
+    });
   });
   document.getElementById('download-answers').addEventListener('click',downloadAnswers);
   document.getElementById('download-answers-dialog').addEventListener('click',downloadAnswers);
@@ -223,7 +257,7 @@ function initNavigation() {
     menu.classList.toggle('is-open',isOpen);
     toggle.setAttribute('aria-expanded',String(isOpen));
     toggle.setAttribute('aria-label',isOpen?'Zamknij menu':'Otwórz menu');
-    if(isOpen)links[0].focus();
+    if(isOpen)links[0].focus({preventScroll:true});
   });
   links.forEach(link=>link.addEventListener('click',closeMenu));
   document.addEventListener('keydown',event=>{
@@ -234,47 +268,71 @@ function initNavigation() {
   document.addEventListener('click',event=>{
     if(menu.classList.contains('is-open')&&!menu.contains(event.target)&&!toggle.contains(event.target))closeMenu();
   });
-  window.addEventListener('resize',()=>{if(window.innerWidth>900)closeMenu();},{passive:true});
+  window.addEventListener('resize',()=>{if(window.innerWidth>1100)closeMenu();},{passive:true});
   let scheduled=false;
+  const observed=links.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
   const onScroll=()=>{
-    if(scheduled)return;
+    if(scheduled || document.body.classList.contains('dialog-open'))return;
     scheduled=true;
     window.requestAnimationFrame(()=>{
+      if(document.body.classList.contains('dialog-open')){scheduled=false;return;}
       const y=window.scrollY;
       const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
       header.classList.toggle('is-scrolled',y>20);
       back.classList.toggle('is-visible',y>600);
-      if(y<300)links.forEach(link=>{link.classList.remove('is-current');link.removeAttribute('aria-current');});
+      const boundary=header.getBoundingClientRect().height+100;
+      const current=y<300?null:observed.filter(section=>section.getBoundingClientRect().top<=boundary).at(-1);
+      links.forEach(link=>{
+        const active=!!current && link.getAttribute('href')==='#'+current.id;
+        link.classList.toggle('is-current',active);
+        if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+      });
       progress.style.width=Math.min(100,Math.max(0,y/max*100))+'%';
       scheduled=false;
     });
   };
   window.addEventListener('scroll',onScroll,{passive:true});
   onScroll();
+  if('ResizeObserver' in window)new ResizeObserver(onScroll).observe(document.querySelector('main'));
   back.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
-  if('IntersectionObserver' in window) {
-    const observed=links.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
-    const observer=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting) {
-          links.forEach(link=>{
-            const active=link.getAttribute('href')==='#'+entry.target.id;
-            link.classList.toggle('is-current',active);
-            if(active)link.setAttribute('aria-current','location');
-            else link.removeAttribute('aria-current');
-          });
-        }
-      });
-    },{rootMargin:'-120px 0px -65% 0px'});
-    observed.forEach(section=>observer.observe(section));
-  }
+
 }
 
 function initAccordions() {
-  const situations=[...document.querySelectorAll('.situation')];
-  situations.forEach(item=>item.addEventListener('toggle',()=>{
-    if(item.open)situations.forEach(other=>{if(other!==item)other.open=false;});
-  }));
+  const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll('.situation,.faq-list details,.blog-card details,.form-block').forEach(details=>{
+    const summary=details.querySelector('summary');
+    let animation=null;
+    let expanded=details.open;
+    const finish=()=>{
+      details.open=expanded;
+      details.style.overflow='';
+      summary.setAttribute('aria-expanded',String(expanded));
+      animation=null;
+    };
+    summary.setAttribute('aria-expanded',String(expanded));
+    summary.addEventListener('click',event=>{
+      event.preventDefault();
+      const startHeight=details.getBoundingClientRect().height;
+      if(animation)animation.cancel();
+      expanded=!expanded;
+      summary.setAttribute('aria-expanded',String(expanded));
+      if(motion.matches || typeof details.animate!=='function'){finish();return;}
+      details.open=true;
+      const border=details.offsetHeight-details.clientHeight;
+      const endHeight=expanded?details.getBoundingClientRect().height:summary.getBoundingClientRect().height+border;
+      details.style.overflow='clip';
+      animation=details.animate({height:[startHeight+'px',endHeight+'px']},{duration:Math.min(320,180+Math.abs(endHeight-startHeight)*.12),easing:'cubic-bezier(.2,.7,.2,1)'});
+      animation.onfinish=finish;
+    });
+    details.addEventListener('toggle',()=>{
+      if(!animation){expanded=details.open;summary.setAttribute('aria-expanded',String(expanded));}
+    });
+    window.addEventListener('beforeprint',()=>{
+      if(animation)animation.cancel();
+      animation=null;details.style.overflow='';
+    });
+  });
 }
 
 function initReveal() {
@@ -282,10 +340,18 @@ function initReveal() {
   const els=[...document.querySelectorAll('[data-reveal]')];
   const observer=new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
-      if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target);}
+      if(entry.isIntersecting){
+        const el=entry.target;
+        el.classList.add('is-visible');observer.unobserve(el);
+        // Release the entrance transform so later hover and focus effects stay independent.
+        setTimeout(()=>el.classList.remove('reveal-ready','is-visible'),950);
+      }
     });
   },{threshold:.06,rootMargin:'0px 0px 30px 0px'});
-  els.forEach(el=>{el.classList.add('reveal-ready');observer.observe(el);});
+  els.forEach(el=>{
+    if(el.getBoundingClientRect().top<window.innerHeight){el.classList.add('is-visible');return;}
+    el.classList.add('reveal-ready');observer.observe(el);
+  });
 }
 
 document.addEventListener('DOMContentLoaded',()=>{

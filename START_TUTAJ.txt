@@ -1,14 +1,22 @@
-STRONA NATALII — AKTUALIZACJA 28.10.2026
+STRONA NATALII — AKTUALIZACJA 04.11.2026
 
-1. Otwórz index.html, zachowując pozostałe pliki i foldery obok.
-2. Zmiany po feedbacku opisano w README.md.
-3. Przyciski „Umów spotkanie” otwierają kontakt z Natalią.
-4. Ankietę można pobrać jako TXT lub wydrukować / zapisać jako PDF.
-   Nie jest wysyłana automatycznie. Plik dołącza się do wiadomości ręcznie,
-   po uzgodnieniu z Natalią sposobu przekazania odpowiedzi.
-5. Do uzupełnienia: numer telefonu, portret, usługa automatycznej wysyłki.
-6. Trzy nowe teksty bloga są do oceny redakcyjnej Natalii.
+Strona: https://matsukoshiii.github.io/strona-natalia/
 
-Aktualizacja istniejącej strony GitHub Pages:
-Zastąp pliki w repozytorium strona-natalia zawartością tej paczki,
-zachowując foldery assets i dokumenty. Zatwierdź i wypchnij zmiany.
+Grafika jest powiększona bezpośrednio na stronie, bez klikanego podglądu.
+Poprawiono animacje, rozwijane sekcje, stabilność zdjęć i mapy,
+okna kontaktowe, menu oraz wygodę wpisywania w ankiecie na telefonie.
+Pełny opis zmian i testów znajduje się w README.md.
+
+LOKALNY PODGLĄD
+Otwórz index.html, zachowując pliki i foldery obok niego.
+Możesz też uruchomić python3 -m http.server 8765 w folderze projektu.
+
+KONTAKT I ANKIETA
+Przyciski „Umów spotkanie” otwierają kontakt z Natalią.
+Odpowiedzi ankiety można pobrać jako TXT lub wydrukować / zapisać do PDF.
+Strona nie wysyła odpowiedzi automatycznie. Plik dołącza się do wiadomości
+ręcznie, po uzgodnieniu z Natalią sposobu jego przekazania.
+
+DO UZUPEŁNIENIA
+Numer telefonu, portret i ewentualna usługa automatycznej wysyłki.
+Teksty bloga są do oceny redakcyjnej Natalii.

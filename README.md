@@ -1,43 +1,47 @@
 # mgr Natalia Szymala — wsparcie rodzica online
 
-Statyczna strona na GitHub Pages. Otwórz `index.html` lub uruchom `python3 -m http.server 8765`. Zasoby są lokalne, bez zależności, trackerów i zewnętrznych fontów.
+Statyczna strona na GitHub Pages: https://matsukoshiii.github.io/strona-natalia/
 
-## Aktualizacja 28.10.2026
+Otwórz `index.html` lub uruchom `python3 -m http.server 8765`. Wszystkie grafiki, style, skrypty i dokumenty są lokalne. Bez zewnętrznych bibliotek, fontów, trackerów i procesu budowania.
 
-Zmiany wynikają z materiałów z 23.10 oraz feedbacku Grzegorza i Natalii z 26.10:
-- Treści Emocje/Zmysły według Natalii; usunięte słowo „psychobiologii”, pozostawione Recall Healing.
-- Pełne nazwisko, „mgr” w nagłówku, czytelny monogram NS i dostosowana typografia.
-- Poprawione opisy wartości i trzech kroków, ujednolicona forma „Rozumiemy i wspieramy”, znaczniki list i wskazane przecinki.
-- Dwa przyciski „Umów spotkanie” z oknem kontaktowym; kontakt w osobnej sekcji i stopce.
-- FAQ rozszerzone z pięciu do ośmiu pytań.
-- Powiększona grafika w hero i okno z pełną grafiką, przewijane na telefonie.
-- Blog z trzema krótkimi tekstami opartymi na pytaniach z materiałów Natalii; wymagają jej oceny redakcyjnej.
-- Eksport odpowiedzi ankiety do TXT, instrukcja ręcznego przekazania e-mailem i poprawiony wydruk długich odpowiedzi.
+## Aktualizacja 04.11.2026
+
+Grafika w nagłówku jest większa bezpośrednio w układzie strony: około 750 px przy ekranie 1440 px, zamiast wcześniejszych 450 px. Usunięto przycisk powiększania, osobne okno podglądu i etykiety zasłaniające obraz. Na węższym ekranie grafika zajmuje szerokość swojej kolumny, a jej główna myśl pozostaje dostępna także jako czytelny tekst.
+
+Pozostałe poprawki:
+- Opisy obszarów współdzielą miejsce dopasowane do najdłuższej treści. Przełączanie mapy nie przesuwa grafiki, przycisków ani kolejnej sekcji.
+- Zdjęcie przy rozwijanych sytuacjach ma niezależną pozycję; obrazy w kartach mają zarezerwowaną przestrzeń i prawidłowe proporcje.
+- Sekcje pytań, bloga i ankiety rozwijają się płynnie, obsługują szybkie ponowne kliknięcia i ustawienie ograniczonego ruchu. Rozwinięcie jednej sytuacji nie zamyka automatycznie innej.
+- Efekty powiększania zdjęć po najechaniu są wyłączone dla dotyku. Odsłanianie sekcji jest łagodniejsze i nie koliduje z późniejszymi interakcjami.
+- Okna kontaktowe zachowują szerokość strony, pozycję przewijania i fokus. Tło jest blokowane również przez stałe pozycjonowanie, z myślą o Safari na iOS.
+- Dodano „Przed spotkaniem” do menu, poprawiono wskazywanie aktualnej sekcji i dostęp do dłuższego menu na niskich ekranach.
+- Pola formularza mają czcionkę 16 px, żeby uniknąć automatycznego przybliżania podczas wpisywania na iPhonie. Akcja czyszczenia jest mniej dominująca.
+- Zachowano zatwierdzone treści Natalii, ceny i dotychczasowy kierunek wizualny; dopracowano gramatykę i czytelność.
 
 ## Kontakt i ankieta
 
-Adres `nataliaszymala1989@gmail.com` pochodzi z oryginalnej wiadomości Natalii z 15.10.2026, przekazanej 23.10. Numer telefonu nie był podany w materiałach i nie został wymyślony.
+Kontakt: `nataliaszymala1989@gmail.com`, zgodnie z materiałami Natalii. Numeru telefonu nie było w dostarczonych danych.
 
-Rezerwacja odbywa się w korespondencji, a link `mailto:` otwiera program pocztowy użytkownika. Ankieta nie wysyła odpowiedzi automatycznie, nie zapisuje ich na serwerze ani w localStorage. Odpowiedzi można wydrukować/zapisać do PDF lub pobrać jako TXT. Użytkownik przekazuje plik ręcznie po uzgodnieniu sposobu z Natalią. Żadne odpowiedzi nie trafiają do adresu URL wiadomości.
+Przyciski „Umów spotkanie” otwierają dane kontaktowe. Termin i szczegóły są ustalane w korespondencji. Link `mailto:` otwiera program pocztowy użytkownika.
 
-## Pozostałe elementy
+Ankieta nie wysyła ani nie przechowuje odpowiedzi na serwerze lub w localStorage. Odpowiedzi można wydrukować, zapisać jako PDF lub pobrać jako TXT. Użytkownik dołącza zapisany plik ręcznie po uzgodnieniu sposobu przekazania z Natalią. Żadne odpowiedzi nie trafiają do adresu URL wiadomości. Bez JavaScript dostępne są dokumenty PDF i kontakt e-mail.
 
-- Uzupełnić telefon, jeśli ma być publiczny.
-- Dostarczyć zapowiedziany portret Natalii.
-- Do automatycznej wysyłki ankiet potrzebna jest skonfigurowana usługa odbierająca zgłoszenia; sam GitHub Pages obsługuje tę stronę statycznie.
-- Sprawdzić nowe teksty bloga i ustalić docelowe informacje formalne przed przyjmowaniem ankiet na serwerze.
+## Weryfikacja
 
-## Pliki
-
-`index.html`, `style.css`, `script.js`, `assets/`, `dokumenty/`. Dostarczone PDF-y pozostawiono bez zmian.
-
-## Weryfikacja aktualizacji
-
-- Chromium: 320 / 390 / 820 / 1024 / 1440 px, brak poziomego overflow i błędów JavaScript.
-- Menu mobilne, mapa z klawiatury, otwieranie i zamykanie okien, powrót fokusu, przewijanie grafiki na telefonie.
-- Osiem pytań FAQ, poprawne kotwice nawigacji.
-- Eksport TXT z polskimi znakami i wieloma liniami.
-- Wydruk PDF z pełną długą odpowiedzią (100 powtórzeń tekstu testowego), bez ucięcia do wysokości textarea.
+Chromium, w tym emulacja dotyku i mobilnego widoku:
+- 320 / 375 / 390 / 430 / 680 / 768 / 820 / 1024 / 1100 / 1150 / 1280 / 1440 / 1920 px: bez poziomego przepełnienia i błędów JavaScript.
+- Stała wysokość mapy i pozycja jej przycisków dla wszystkich pięciu obszarów na każdej z tych szerokości.
+- Stała pozycja zdjęcia przy rozwijaniu sąsiedniego tekstu w układzie dwukolumnowym.
+- Okna kontaktowe bez przesunięcia poziomego, z przywracaniem przewijania i fokusu.
+- Menu mobilne, obsługa mapy klawiaturą, poprawne kotwice i grafiki.
+- Szybkie otwieranie/zamykanie sekcji z włączonymi animacjami; brak pozostawionych animacji i wymuszonej wysokości.
+- Eksport TXT z polskimi znakami i wieloma liniami oraz wydruk pełnej długiej odpowiedzi.
 - `node --check script.js` i `git diff --check`.
 
-Nie przeprowadzono rzeczywistej wysyłki e-mail ani rezerwacji; strona ich automatycznie nie wykonuje. Publikacja na GitHub Pages wymaga dostępu do zapisu w repozytorium.
+Testy nie zastępują sprawdzenia na fizycznym iPhonie. Nie wykonują rzeczywistej wysyłki wiadomości ani rezerwacji.
+
+## Pliki i dalsze uzupełnienia
+
+`index.html`, `style.css`, `script.js`, `assets/`, `dokumenty/`. Dostarczone PDF-y zachowano bez zmian. Wersjonowane adresy CSS i JS ułatwiają pobranie aktualizacji po publikacji.
+
+Do późniejszego uzupełnienia: telefon, zapowiedziany portret Natalii i skonfigurowana usługa odbierająca ankiety, jeśli potrzebna będzie automatyczna wysyłka. Trzy krótkie teksty bloga pozostają do oceny redakcyjnej Natalii.
